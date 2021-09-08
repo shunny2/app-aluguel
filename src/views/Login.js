@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Text, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
 
-const Login = (props) => {
+const Login = () => {
 
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
 
