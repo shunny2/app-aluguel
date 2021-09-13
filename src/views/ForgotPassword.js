@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Text, Animated, Keyboard } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
 
-const Login = (props) => {
-
+const ForgotPassword = (props) => {
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
 
     useEffect(() => { //useEffect vai renderizar somente uma vez quando a tela é carregada.
@@ -55,35 +54,21 @@ const Login = (props) => {
             </View>
 
             <View style={styles.container}>
-                <Text style={styles.text}>Email</Text>
+                <Text style={styles.text}>Informe seu email</Text>
                 <TextInput
                     style={styles.input}
                     autoCorrect={false}
                     onChangeText={() => { }} />
 
-                <Text style={styles.text}>Senha</Text>
-                <TextInput
-                    style={styles.input}
-                    autoCorrect={false}
-                    onChangeText={() => { }} />
-
-                <TouchableOpacity style={styles.btnForgetPass} onPress={() => props.navigation.navigate('ForgotPassword')}>
-                    <Text style={styles.forgetPassAndRegisterTxt}>Esqueci a senha</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.btnSubmit}>
-                    <Text style={styles.submitTxt}>Entrar</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.btnRegister} onPress={() => props.navigation.navigate('UserForm')}>
-                    <Text style={styles.forgetPassAndRegisterTxt}>Criar nova conta</Text>
+                <TouchableOpacity style={styles.btnSubmit} onPress={() => props.navigation.pop()}>
+                    <Text style={styles.submitTxt}>Nova Senha</Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
 }
 
-export default Login;
+export default ForgotPassword;
 
 const styles = StyleSheet.create({
     background: {
@@ -94,7 +79,8 @@ const styles = StyleSheet.create({
     },
     containerLogo: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingBottom: 55,
     },
     container: {
         flex: 1,
@@ -105,20 +91,19 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: '#FFF',
-        width: 227,
-        height: 37,
+        width: 276,
+        height: 58,
         marginBottom: 15,
         color: '#222',
-        fontSize: 17,
+        fontSize: 20,
         borderRadius: 10,
         padding: 10,
-        marginBottom: 5
     },
     text: {
         color: '#FFF',
-        fontSize: 24,
+        fontSize: 33,
         fontFamily: 'Roboto',
-        padding: 8
+        padding: 12
     },
     btnSubmit: {
         backgroundColor: '#FFF',
@@ -126,23 +111,12 @@ const styles = StyleSheet.create({
         height: 72,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        marginTop: 57
     },
     submitTxt: {
         color: '#000',
         fontSize: 24,
         fontFamily: 'Roboto'
-    },
-    btnRegister: {
-        marginTop: 10
-    },
-    btnForgetPass: {
-        marginBottom: 30
-    },
-    forgetPassAndRegisterTxt: {
-        color: '#FFF',
-        fontFamily: 'Roboto',
-        fontWeight: 'bold',
-        fontSize: 18
-    },
+    }
 });
