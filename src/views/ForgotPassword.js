@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
+import firebase from '../views/config/firebase';
 
 const ForgotPassword = (props) => {
+
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
+
+    const [email, setEmail] = useState('');
 
     useEffect(() => { //useEffect vai renderizar somente uma vez quando a tela é carregada.
         /*Chamando as funções de quando o teclado está aberto e fechado.*/
@@ -42,6 +46,16 @@ const ForgotPassword = (props) => {
         ]).start();
     }
 
+    const SendPasswordReset = () => {
+        firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+            props.navigation.pop();
+            alert('Um e-mail de recuperação foi enviado para sua caixa de mensagens.');
+        }).catch(() => {
+            alert('Este e-mail não está cadastrado.')
+        });
+    }
+
     return (
         <KeyboardAvoidingView style={styles.background}>
             <View style={styles.containerLogo}>
@@ -58,9 +72,11 @@ const ForgotPassword = (props) => {
                 <TextInput
                     style={styles.input}
                     autoCorrect={false}
-                    onChangeText={() => { }} />
+                    keyboardType="email-address"
+                    onChangeText={(text) => setEmail(text)}
+                    value={email} />
 
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => props.navigation.pop()}>
+                <TouchableOpacity style={styles.btnSubmit} onPress={SendPasswordReset}>
                     <Text style={styles.submitTxt}>Nova Senha</Text>
                 </TouchableOpacity>
             </View>

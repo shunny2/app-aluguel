@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Text, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
+import firebase from '../views/config/firebase';
 
 const Login = (props) => {
 
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
-    
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorLogin, setErrorLogin] = useState('');
@@ -14,6 +15,14 @@ const Login = (props) => {
         /*Chamando as funções de quando o teclado está aberto e fechado.*/
         keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
         keyboardHidehowListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
+
+        //Verifica se tem um usuário ja logado. caso sim entra automaticamente.
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                //navigation.navigate("Perfil", { idUser: user.uid });
+                console.log('Login automatico realizado. \n ID: ' + user.uid);
+            }
+        });
     }, []);
 
     /*Funções que verifica se o teclado está aberto ou fechado*/
@@ -47,6 +56,19 @@ const Login = (props) => {
         ]).start();
     }
 
+    const Login = () => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                let user = userCredential.user;
+                console.log("Usuário logado! \n ID: " + user.uid);
+            }).catch((error) => {
+                let errorCode = error.code;
+                let errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+            });
+    }
+
     return (
         <KeyboardAvoidingView style={styles.background}>
             <View style={styles.containerLogo}>
@@ -64,21 +86,24 @@ const Login = (props) => {
                     style={styles.input}
                     type="text"
                     autoCorrect={false}
-                    onChangeText={(text) => setEmail(text)} />
+                    onChangeText={(text) => setEmail(text)}
+                    value={email} />
 
                 <Text style={styles.text}>Senha</Text>
                 <TextInput
                     style={styles.input}
                     type="text"
+                    autoCapitalize="none"
                     secureTextEntry={true}
                     autoCorrect={false}
-                    onChangeText={(text) => setPassword(text)} />
+                    onChangeText={(text) => setPassword(text)}
+                    value={password} />
 
                 <TouchableOpacity style={styles.btnForgetPass} onPress={() => props.navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgetPassAndRegisterTxt}>Esqueci a senha</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btnSubmit}>
+                <TouchableOpacity style={styles.btnSubmit} onPress={Login}>
                     <Text style={styles.submitTxt}>Entrar</Text>
                 </TouchableOpacity>
 
