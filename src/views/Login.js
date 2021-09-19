@@ -5,6 +5,10 @@ import Logo from '../../assets/logo.png';
 const Login = (props) => {
 
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
+    
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorLogin, setErrorLogin] = useState('');
 
     useEffect(() => { //useEffect vai renderizar somente uma vez quando a tela é carregada.
         /*Chamando as funções de quando o teclado está aberto e fechado.*/
@@ -58,14 +62,17 @@ const Login = (props) => {
                 <Text style={styles.text}>Email</Text>
                 <TextInput
                     style={styles.input}
+                    type="text"
                     autoCorrect={false}
-                    onChangeText={() => { }} />
+                    onChangeText={(text) => setEmail(text)} />
 
                 <Text style={styles.text}>Senha</Text>
                 <TextInput
                     style={styles.input}
+                    type="text"
+                    secureTextEntry={true}
                     autoCorrect={false}
-                    onChangeText={() => { }} />
+                    onChangeText={(text) => setPassword(text)} />
 
                 <TouchableOpacity style={styles.btnForgetPass} onPress={() => props.navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgetPassAndRegisterTxt}>Esqueci a senha</Text>
