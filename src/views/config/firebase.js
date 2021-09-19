@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/firestore'
+
 let firebaseConfig = {
     apiKey: "AIzaSyAa5Rut2__qWVnzdDQiEBN1PkgbLgMVjT4",
     authDomain: "app-aluguel-3e7c1.firebaseapp.com",
