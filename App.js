@@ -1,11 +1,69 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Login from './src/views/Login';
 import ForgotPassword from './src/views/ForgotPassword';
 import UserForm from './src/views/UserForm';
+import Home from './src/views/Home';
+import Profile from './src/views/Profile';
+import Logout from './src/views/Logout';
 
 const Stack = createNativeStackNavigator()
+const Drawer = createDrawerNavigator();
+
+function DrawerScreens() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Home"
+      screenOptions={screenOptions}>
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerTitle: '',
+          drawerIcon: ({focused, size}) => (
+            <MaterialCommunityIcons
+            name="home-circle-outline"
+            size={size}
+            color={focused ? "#1E90FF" : "#808080"}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerTitle: '',
+          drawerIcon: ({focused, size}) => (
+            <MaterialCommunityIcons
+            name="account-circle-outline"
+            size={size}
+            color={focused ? "#1E90FF" : "#808080"}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen
+        name="Logout"
+        component={Logout}
+        options={{
+          headerShown: false,
+          drawerIcon: ({focused, size}) => (
+            <MaterialCommunityIcons
+            name="location-exit"
+            size={size}
+            color={focused ? "#1E90FF" : "#808080"}
+            />
+          )
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -39,6 +97,14 @@ export default function App() {
             title: 'Formulário de Usuários'
           }}
         />
+        <Stack.Screen
+          name="DrawerScreens"
+          component={DrawerScreens}
+          options={{
+            headerShown: false,
+            title: 'Menu Lateral'
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -46,9 +112,9 @@ export default function App() {
 
 const screenOptions = {
   headerStyle: {
-    backgroundColor: '#000'
+    backgroundColor: '#FFF'
   },
-  headerTintColor: '#fff',
+  headerTintColor: '#000',
   headerTitleStyle: {
     fontWeight: 'bold'
   }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Text, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../views/config/firebase';
 
 const Login = (props) => {
@@ -19,7 +20,7 @@ const Login = (props) => {
         //Verifica se tem um usuário ja logado. caso sim entra automaticamente.
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                //navigation.navigate("Perfil", { idUser: user.uid });
+                props.navigation.navigate("DrawerScreens", { screen: 'Home', idUser: user.uid });
                 console.log('Login automatico realizado. \n ID: ' + user.uid);
             }
         });
@@ -60,8 +61,10 @@ const Login = (props) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 let user = userCredential.user;
-                console.log("Usuário logado! \n ID: " + user.uid);
+                console.log("Usuário logado! \n ID: " + user.uid + "\n E-mail: " + user.email);
+                props.navigation.navigate('DrawerScreens', { screen: 'Home'});
             }).catch((error) => {
+                setErrorLogin(true);
                 let errorCode = error.code;
                 let errorMessage = error.message;
                 console.log(errorCode);
@@ -99,9 +102,23 @@ const Login = (props) => {
                     onChangeText={(text) => setPassword(text)}
                     value={password} />
 
-                <TouchableOpacity style={styles.btnForgetPass} onPress={() => props.navigation.navigate('ForgotPassword')}>
+                <TouchableOpacity onPress={() => props.navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgetPassAndRegisterTxt}>Esqueci a senha</Text>
                 </TouchableOpacity>
+
+                {errorLogin == true
+                    ?
+                    <View style={styles.contentAlert}>
+                        <MaterialCommunityIcons
+                            name="alert-circle"
+                            size={24}
+                            color="red"
+                        />
+                        <Text style={styles.warningAlert}>E-mail ou senha inválidos</Text>
+                    </View>
+                    :
+                    <View></View>
+                }
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={Login}>
                     <Text style={styles.submitTxt}>Entrar</Text>
@@ -158,7 +175,8 @@ const styles = StyleSheet.create({
         height: 72,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        marginTop: 30
     },
     submitTxt: {
         color: '#000',
@@ -168,13 +186,21 @@ const styles = StyleSheet.create({
     btnRegister: {
         marginTop: 10
     },
-    btnForgetPass: {
-        marginBottom: 30
-    },
     forgetPassAndRegisterTxt: {
         color: '#FFF',
         fontFamily: 'Roboto',
         fontWeight: 'bold',
         fontSize: 18
     },
+    contentAlert: {
+        marginTop: 10,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    warningAlert: {
+        paddingLeft: 10,
+        color: "red",
+        fontSize: 16
+    }
 });

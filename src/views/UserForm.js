@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, ScrollView, Platform, Image } from 'react-native';
 import Logo from '../../assets/logo.png';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../views/config/firebase';
 
 export default class Form extends React.Component {
@@ -8,10 +9,11 @@ export default class Form extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name:"",
-            email:"",
-            password:"",
-            cpf:""
+            name: "",
+            email: "",
+            password: "",
+            cpf: "",
+            errorCreateNewUser: ""
         };
     }
 
@@ -19,16 +21,17 @@ export default class Form extends React.Component {
 
         const CreateNewUser = () => {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then((userCredential) => {
-                let user = userCredential.user;
-                console.log("Usuário criado! \n ID: "+user.uid);
-                this.props.navigation.pop();
-            }).catch((error) => {
-                let errorCode = error.code;
-                let errorMessage = error.message;
-                console.log(errorCode);
-                console.log(errorMessage);
-            });
+                .then((userCredential) => {
+                    let user = userCredential.user;
+                    console.log("Usuário criado! \n ID: " + user.uid);
+                    this.props.navigation.pop();
+                }).catch((error) => {
+                    this.setState({ errorCreateNewUser: true });
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                });
         }
 
         return (
@@ -50,14 +53,14 @@ export default class Form extends React.Component {
                         <TextInput
                             style={styles.input}
                             autoCompleteType="name"
-                            onChangeText={(text) => { this.setState({name: text}) }}
+                            onChangeText={(text) => { this.setState({ name: text }) }}
                             value={this.state.name} />
 
                         <Text style={styles.text}>Email</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="email-address"
-                            onChangeText={(text) => { this.setState({email: text}) }}
+                            onChangeText={(text) => { this.setState({ email: text }) }}
                             value={this.state.email} />
 
                         <Text style={styles.text}>Senha</Text>
@@ -66,7 +69,7 @@ export default class Form extends React.Component {
                             autoCapitalize="none"
                             secureTextEntry={true}
                             autoCorrect={false}
-                            onChangeText={(text) => { this.setState({password: text}) }}
+                            onChangeText={(text) => { this.setState({ password: text }) }}
                             value={this.state.password} />
                         <Text style={styles.text}>CPF</Text>
                         <TextInput
@@ -74,9 +77,21 @@ export default class Form extends React.Component {
                             keyboardType="numeric"
                             autoCapitalize="none"
                             autoCorrect={false}
-                            onChangeText={(text) => {this.setState({cpf: text}) }}
+                            onChangeText={(text) => { this.setState({ cpf: text }) }}
                             value={this.state.cpf} />
-
+                        {this.state.errorCreateNewUser == true
+                            ?
+                            <View style={styles.contentAlert}>
+                                <MaterialCommunityIcons
+                                    name="alert-circle"
+                                    size={24}
+                                    color="red"
+                                />
+                                <Text style={styles.warningAlert}>E-mail ou senha inválidos.</Text>
+                            </View>
+                            :
+                            <View></View>
+                        }
                         <TouchableOpacity
                             style={styles.btnSubmit}
                             onPress={CreateNewUser}>
@@ -137,5 +152,16 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 24,
         fontFamily: 'Roboto'
+    },
+    contentAlert: {
+        marginTop: 20,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    warningAlert: {
+        paddingLeft: 10,
+        color: "red",
+        fontSize: 16
     }
 });

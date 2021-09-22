@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../views/config/firebase';
 
 const ForgotPassword = (props) => {
@@ -8,6 +9,7 @@ const ForgotPassword = (props) => {
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
 
     const [email, setEmail] = useState('');
+    const [errorEmail, setErrorEmail] = useState('');
 
     useEffect(() => { //useEffect vai renderizar somente uma vez quando a tela é carregada.
         /*Chamando as funções de quando o teclado está aberto e fechado.*/
@@ -48,12 +50,14 @@ const ForgotPassword = (props) => {
 
     const SendPasswordReset = () => {
         firebase.auth().sendPasswordResetEmail(email)
-        .then(() => {
-            props.navigation.pop();
-            alert('Um e-mail de recuperação foi enviado para sua caixa de mensagens.');
-        }).catch(() => {
-            alert('Este e-mail não está cadastrado.')
-        });
+            .then(() => {
+                props.navigation.pop();
+                alert('Um e-mail de recuperação foi enviado para sua caixa de mensagens.');
+                console.log('Um e-mail de recuperação foi enviado para sua caixa de mensagens.');
+            }).catch(() => {
+                setErrorEmail(true);
+                console.log('Este e-mail não está cadastrado.');
+            });
     }
 
     return (
@@ -75,6 +79,20 @@ const ForgotPassword = (props) => {
                     keyboardType="email-address"
                     onChangeText={(text) => setEmail(text)}
                     value={email} />
+
+                {errorEmail == true
+                    ?
+                    <View style={styles.contentAlert}>
+                        <MaterialCommunityIcons
+                            name="alert-circle"
+                            size={24}
+                            color="red"
+                        />
+                        <Text style={styles.warningAlert}>Este e-mail não está cadastrado.</Text>
+                    </View>
+                    :
+                    <View></View>
+                }
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={SendPasswordReset}>
                     <Text style={styles.submitTxt}>Nova Senha</Text>
@@ -134,5 +152,16 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 24,
         fontFamily: 'Roboto'
+    },
+    contentAlert: {
+        marginTop: 5,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    warningAlert: {
+        paddingLeft: 10,
+        color: "red",
+        fontSize: 16
     }
 });
