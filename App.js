@@ -10,6 +10,7 @@ import ForgotPassword from './src/views/ForgotPassword';
 import UserForm from './src/views/UserForm';
 import Home from './src/views/Home';
 import Profile from './src/views/Profile';
+import Address from './src/views/Address';
 import Logout from './src/views/Logout';
 
 const Stack = createNativeStackNavigator()
@@ -25,11 +26,11 @@ function DrawerScreens({ navigation }) {
         component={Home}
         options={{
           headerTitle: '',
-          drawerIcon: ({focused, size}) => (
+          drawerIcon: ({ focused, size }) => (
             <MaterialCommunityIcons
-            name="home-circle-outline"
-            size={size}
-            color={focused ? "#1E90FF" : "#808080"}
+              name="home-circle-outline"
+              size={size}
+              color={focused ? "#1E90FF" : "#808080"}
             />
           )
         }}
@@ -39,19 +40,19 @@ function DrawerScreens({ navigation }) {
         component={Profile}
         options={{
           headerTitle: '',
-          drawerIcon: ({focused, size}) => (
+          drawerIcon: ({ focused, size }) => (
             <MaterialCommunityIcons
-            name="account-circle-outline"
-            size={size}
-            color={focused ? "#1E90FF" : "#808080"}
+              name="account-circle-outline"
+              size={size}
+              color={focused ? "#1E90FF" : "#808080"}
             />
           ),
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={() => {navigation.navigate('Home');}}>
-              <View style={{justifyContent: "center", alignItems:"center"}}>
-                <Text style={{fontSize: 24, fontFamily:'Roboto', padding: 10}}>Editar</Text>
-              </View>
+              <TouchableOpacity onPress={() => { navigation.navigate('Home'); }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Editar</Text>
+                </View>
               </TouchableOpacity>
             );
           },
@@ -62,11 +63,11 @@ function DrawerScreens({ navigation }) {
         component={Logout}
         options={{
           headerShown: false,
-          drawerIcon: ({focused, size}) => (
+          drawerIcon: ({ focused, size }) => (
             <MaterialCommunityIcons
-            name="location-exit"
-            size={size}
-            color={focused ? "#1E90FF" : "#808080"}
+              name="location-exit"
+              size={size}
+              color={focused ? "#1E90FF" : "#808080"}
             />
           )
         }}
@@ -105,6 +106,14 @@ export default function App() {
           options={{
             headerShown: false,
             title: 'Formulário de Usuários'
+          }}
+        />
+        <Stack.Screen
+          name="Address"
+          component={Address}
+          options={{
+            headerShown: false,
+            title: 'Endereços'
           }}
         />
         <Stack.Screen

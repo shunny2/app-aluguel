@@ -19,6 +19,11 @@ export default class Profile extends React.Component {
   }
 
   render() {
+    
+    const GoToAddress = () => {
+      this.props.navigation.navigate('Address');
+    }
+
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -87,8 +92,8 @@ export default class Profile extends React.Component {
             }
             <TouchableOpacity
               style={styles.btnAddress}
-              onPress={() => {}}>
-              <Text style={styles.AddressTxt}>Endereços</Text>
+              onPress={GoToAddress}>
+              <Text style={styles.addressTxt}>Endereços</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 30
   },
-  AddressTxt: {
+  addressTxt: {
     color: '#FFF',
     fontSize: 24,
     fontFamily: 'Roboto'
