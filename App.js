@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -14,7 +15,7 @@ import Logout from './src/views/Logout';
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator();
 
-function DrawerScreens() {
+function DrawerScreens({ navigation }) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -44,7 +45,16 @@ function DrawerScreens() {
             size={size}
             color={focused ? "#1E90FF" : "#808080"}
             />
-          )
+          ),
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => {navigation.navigate('Home');}}>
+              <View style={{justifyContent: "center", alignItems:"center"}}>
+                <Text style={{fontSize: 24, fontFamily:'Roboto', padding: 10}}>Editar</Text>
+              </View>
+              </TouchableOpacity>
+            );
+          },
         }}
       />
       <Drawer.Screen

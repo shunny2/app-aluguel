@@ -24,7 +24,7 @@ export default class Profile extends React.Component {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.background}
       >
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.containerLogo}>
             <Image
               style={{
@@ -86,9 +86,9 @@ export default class Profile extends React.Component {
               <View></View>
             }
             <TouchableOpacity
-              style={styles.btnSubmit}
+              style={styles.btnAddress}
               onPress={() => {}}>
-              <Text style={styles.submitTxt}>Endereços</Text>
+              <Text style={styles.AddressTxt}>Endereços</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     padding: 3
   },
-  btnSubmit: {
+  btnAddress: {
     backgroundColor: '#000',
     width: 170,
     height: 72,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 30
   },
-  submitTxt: {
+  AddressTxt: {
     color: '#FFF',
     fontSize: 24,
     fontFamily: 'Roboto'
