@@ -5,7 +5,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import firebase from '../views/config/firebase';
 import api from '../services/api';
-import axios from 'axios';
 
 export default class Form extends React.Component {
 
@@ -24,7 +23,15 @@ export default class Form extends React.Component {
 
         const CreateNewUser = async () => {
             try {
-                const response = await axios.post('', { ...this.state });
+                const response = await api.post('', { 
+                    name: this.state.name,
+                    email: this.state.email,
+                    password: this.state.password,
+                    cpf: this.state.cpf
+                });
+
+                //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
                 return response.data;
             } catch (error) {
                 console.log('erro: ', error);
