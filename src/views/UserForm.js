@@ -2,7 +2,10 @@ import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, ScrollView, Platform, Image } from 'react-native';
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import firebase from '../views/config/firebase';
+import api from '../services/api';
+import axios from 'axios';
 
 export default class Form extends React.Component {
 
@@ -19,7 +22,16 @@ export default class Form extends React.Component {
 
     render() {
 
-        const CreateNewUser = () => {
+        const CreateNewUser = async () => {
+            try {
+                const response = await axios.post('', { ...this.state });
+                return response.data;
+            } catch (error) {
+                console.log('erro: ', error);
+            }
+        }
+
+        /*const CreateNewUser = () => {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then((userCredential) => {
                     let user = userCredential.user;
@@ -32,7 +44,7 @@ export default class Form extends React.Component {
                     console.log(errorCode);
                     console.log(errorMessage);
                 });
-        }
+        }*/
 
         return (
             <KeyboardAvoidingView
