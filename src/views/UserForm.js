@@ -22,19 +22,28 @@ export default class Form extends React.Component {
     render() {
 
         const CreateNewUser = async () => {
-            try {
-                const response = await api.post('', { 
-                    name: this.state.name,
-                    email: this.state.email,
-                    password: this.state.password,
-                    cpf: this.state.cpf
-                });
+            if (this.state.name != '' && this.state.email != '' && this.password != '' && this.cpf != '') {
+                try {
+                    const response = await api.post('/usuarios/create', {
+                        nome: this.state.name,
+                        email: this.state.email,
+                        senha: this.state.password,
+                        cpf_cnpj: this.state.cpf
+                    });
 
-                //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+                    //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
 
-                return response.data;
-            } catch (error) {
-                console.log('erro: ', error);
+                    this.props.navigation.pop();
+
+                    console.log(response.data);
+                    
+                    return response.data;
+
+                } catch (error) {
+                    console.log('Request Error:', error);
+                }
+            }else {
+                this.setState({ errorCreateNewUser: true });
             }
         }
 
@@ -106,7 +115,7 @@ export default class Form extends React.Component {
                                     size={24}
                                     color="red"
                                 />
-                                <Text style={styles.warningAlert}>E-mail ou senha inválidos.</Text>
+                                <Text style={styles.warningAlert}>Todos os campos devem serem preenchidos.</Text>
                             </View>
                             :
                             <View></View>
@@ -133,6 +142,7 @@ const styles = StyleSheet.create({
     containerLogo: {
         flex: 1,
         justifyContent: 'center',
+        alignSelf: 'center',
         paddingBottom: 45,
     },
     container: {
@@ -181,6 +191,6 @@ const styles = StyleSheet.create({
     warningAlert: {
         paddingLeft: 10,
         color: "red",
-        fontSize: 16
+        fontSize: 12
     }
 });
