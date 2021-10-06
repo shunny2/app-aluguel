@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, Animated, Keyboard } from 'react-native';
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import firebase from '../views/config/firebase';
+
+import firebase from '../services/firebase';
 
 const ForgotPassword = (props) => {
 

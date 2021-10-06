@@ -3,7 +3,7 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpaci
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import firebase from '../views/config/firebase';
+import firebase from '../services/firebase';
 import api from '../services/api';
 
 export default class Form extends React.Component {

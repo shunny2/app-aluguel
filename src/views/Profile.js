@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, ScrollView, Platform, Image } from 'react-native';
 import ProfileIcon from '../../assets/profileIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import firebase from '../views/config/firebase';
+
+import firebase from '../services/firebase';
 
 export default class Profile extends React.Component {
 

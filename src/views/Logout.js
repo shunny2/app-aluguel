@@ -1,4 +1,4 @@
-import firebase from '../views/config/firebase';
+import firebase from '../services/firebase';
 
 function Logout({ navigation }) {
     firebase.auth().signOut()
