@@ -3,7 +3,7 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Te
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import firebase from '../services/firebase';
+import api from '../services/api';
 
 const Login = (props) => {
 
@@ -12,19 +12,12 @@ const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorLogin, setErrorLogin] = useState('');
+    const [errorEmptyField, setErrorEmptyField] = useState('');
 
     useEffect(() => { //useEffect vai renderizar somente uma vez quando a tela é carregada.
         /*Chamando as funções de quando o teclado está aberto e fechado.*/
         keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', keyboardDidShow);
         keyboardHidehowListener = Keyboard.addListener('keyboardDidHide', keyboardDidHide);
-
-        //Verifica se tem um usuário ja logado. caso sim entra automaticamente.
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                props.navigation.navigate("DrawerScreens", { screen: 'Home', idUser: user.uid });
-                console.log('Login automatico realizado. \n ID: ' + user.uid);
-            }
-        });
     }, []);
 
     /*Funções que verifica se o teclado está aberto ou fechado*/
@@ -58,19 +51,32 @@ const Login = (props) => {
         ]).start();
     }
 
-    const Login = () => {
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                let user = userCredential.user;
-                console.log("Usuário logado! \n ID: " + user.uid + "\n E-mail: " + user.email);
-                props.navigation.navigate('DrawerScreens', { screen: 'Home'});
-            }).catch((error) => {
-                setErrorLogin(true);
-                let errorCode = error.code;
+    const Login = async () => {
+        if (email != '' & password != '') {
+            try {
+                const response = await api.post('/usuarios/authenticate', {
+                    email: email,
+                    senha: password,
+                });
+
+                //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
+                console.log(response.data);
+                props.navigation.navigate('DrawerScreens', { screen: 'Home' });
+
+                return response.data;
+
+            } catch (error) {
                 let errorMessage = error.message;
-                console.log(errorCode);
                 console.log(errorMessage);
-            });
+                console.log('Request Error:', error);
+                setErrorLogin(true);
+                setErrorEmptyField(false);
+            }
+        } else {
+            setErrorEmptyField(true);
+            setErrorLogin(false);
+        }
     }
 
     return (
@@ -107,6 +113,20 @@ const Login = (props) => {
                     <Text style={styles.forgetPassAndRegisterTxt}>Esqueci a senha</Text>
                 </TouchableOpacity>
 
+                {errorEmptyField == true
+                    ?
+                    <View style={styles.contentAlert}>
+                        <MaterialCommunityIcons
+                            name="alert-circle"
+                            size={24}
+                            color="red"
+                        />
+                        <Text style={styles.warningAlert}>Todos os campos devem serem preenchidos.</Text>
+                    </View>
+                    :
+                    <View></View>
+                }
+
                 {errorLogin == true
                     ?
                     <View style={styles.contentAlert}>
@@ -115,7 +135,7 @@ const Login = (props) => {
                             size={24}
                             color="red"
                         />
-                        <Text style={styles.warningAlert}>E-mail ou senha inválidos</Text>
+                        <Text style={styles.warningAlert}>E-mail ou senha inválidos.</Text>
                     </View>
                     :
                     <View></View>
