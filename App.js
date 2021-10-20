@@ -12,6 +12,9 @@ import Home from './src/views/Home';
 import Profile from './src/views/Profile';
 import Address from './src/views/Address';
 import Logout from './src/views/Logout';
+import NewAddress from './src/views/NewAddress';
+import MyProducts from './src/views/MyProducts';
+import NewProduct from './src/views/NewProduct';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator();
@@ -56,6 +59,43 @@ function DrawerScreens({ navigation }) {
               </TouchableOpacity>
             );
           },
+        }}
+      />
+      <Drawer.Screen
+        name="Address"
+        component={Address}
+        options={{
+          headerTitle: ''
+        }}
+      />
+      <Drawer.Screen
+        name="NewAddress"
+        component={NewAddress}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Drawer.Screen
+        name="NewProduct"
+        component={NewProduct}
+        options={{
+          headerTitle: '',
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => { navigation.navigate('MyProducts'); }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Salvar</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="MyProducts"
+        component={MyProducts}
+        options={{
+          headerTitle: '',
         }}
       />
       <Drawer.Screen
@@ -106,14 +146,6 @@ export default function App() {
           options={{
             headerShown: false,
             title: 'Formulário de Usuários'
-          }}
-        />
-        <Stack.Screen
-          name="Address"
-          component={Address}
-          options={{
-            headerShown: false,
-            title: 'Endereços'
           }}
         />
         <Stack.Screen
