@@ -3,7 +3,6 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpaci
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import firebase from '../services/firebase';
 import api from '../services/api';
 
 export default class Form extends React.Component {
@@ -46,21 +45,6 @@ export default class Form extends React.Component {
                 this.setState({ errorCreateNewUser: true });
             }
         }
-
-        /*const CreateNewUser = () => {
-            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-                .then((userCredential) => {
-                    let user = userCredential.user;
-                    console.log("Usuário criado! \n ID: " + user.uid);
-                    this.props.navigation.pop();
-                }).catch((error) => {
-                    this.setState({ errorCreateNewUser: true });
-                    let errorCode = error.code;
-                    let errorMessage = error.message;
-                    console.log(errorCode);
-                    console.log(errorMessage);
-                });
-        }*/
 
         return (
             <KeyboardAvoidingView
