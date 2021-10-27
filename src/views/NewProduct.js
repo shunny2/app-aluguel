@@ -16,12 +16,42 @@ export default class NewProduct extends React.Component {
             price: "",
             checked: Boolean,
             rentPrice: "",
+            errorCreateNewProduct: ""
         };
     }
     
-  
-
     render() {
+
+        const CreateNewProduct = async () => {
+            // if (this.state.productName != '' && this.state.size != '' && this.description != '' && this.quantity != '' && this.category != '' && this.price != '') {
+            //     try {
+            //         const response = await api.post('/usuarios/create', {
+            //             nome: this.state.productName,
+            //             preco: this.state.price,
+            //             estoque: this.state.quantity,
+            //             medida: this.state.size,
+            //             valor_aluguel: this.state.rentPrice,
+            //             categoria: this.state.category,
+            //             disponivel: this.state.checked,
+            //             descricao: this.state.description
+            //         });
+
+            //         //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
+            //         this.props.navigation.pop();
+
+            //         console.log(response.data);
+                    
+            //         return response.data;
+
+            //     } catch (error) {
+            //         console.log('Request Error:', error);
+            //     }
+            // }else {
+            //     this.setState({ errorCreateNewProduct: true });
+            // }
+        }
+
         return (
             <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
