@@ -82,7 +82,7 @@ function DrawerScreens({ navigation }) {
           headerTitle: '',
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={() => { navigation.navigate('MyProducts'); }}>
+              <TouchableOpacity onPress={() => {}}>
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                   <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Salvar</Text>
                 </View>
@@ -96,6 +96,13 @@ function DrawerScreens({ navigation }) {
         component={MyProducts}
         options={{
           headerTitle: '',
+          drawerIcon: ({ focused, size }) => (
+            <MaterialCommunityIcons
+              name="cash"
+              size={size}
+              color={focused ? "#1E90FF" : "#808080"}
+            />
+          )
         }}
       />
       <Drawer.Screen
@@ -105,7 +112,7 @@ function DrawerScreens({ navigation }) {
           headerShown: false,
           drawerIcon: ({ focused, size }) => (
             <MaterialCommunityIcons
-              name="location-exit"
+              name="exit-to-app"
               size={size}
               color={focused ? "#1E90FF" : "#808080"}
             />

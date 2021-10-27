@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, ScrollView, Platform, Image} from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, ScrollView, Platform, Image } from 'react-native';
 import Product from '../../assets/product.jpg';
-import { CheckBox } from 'react-native-elements'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { CheckBox } from 'react-native-elements';
 
 export default class NewProduct extends React.Component {
 
@@ -19,37 +20,37 @@ export default class NewProduct extends React.Component {
             errorCreateNewProduct: ""
         };
     }
-    
+
     render() {
 
         const CreateNewProduct = async () => {
-            // if (this.state.productName != '' && this.state.size != '' && this.description != '' && this.quantity != '' && this.category != '' && this.price != '') {
-            //     try {
-            //         const response = await api.post('/usuarios/create', {
-            //             nome: this.state.productName,
-            //             preco: this.state.price,
-            //             estoque: this.state.quantity,
-            //             medida: this.state.size,
-            //             valor_aluguel: this.state.rentPrice,
-            //             categoria: this.state.category,
-            //             disponivel: this.state.checked,
-            //             descricao: this.state.description
-            //         });
+            if (this.state.productName != '' && this.state.size != '' && this.description != '' && this.quantity != '' && this.category != '' && this.price != '') {
+                try {
+                    const response = await api.post('/produtos/create', {
+                        nome: this.state.productName,
+                        preco: this.state.price,
+                        estoque: this.state.quantity,
+                        medida: this.state.size,
+                        valor_aluguel: this.state.rentPrice,
+                        categoria: this.state.category,
+                        disponivel: this.state.checked,
+                        descricao: this.state.description
+                    });
 
-            //         //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+                    //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
 
-            //         this.props.navigation.pop();
+                    this.props.navigation.pop();
 
-            //         console.log(response.data);
-                    
-            //         return response.data;
+                    console.log(response.data);
 
-            //     } catch (error) {
-            //         console.log('Request Error:', error);
-            //     }
-            // }else {
-            //     this.setState({ errorCreateNewProduct: true });
-            // }
+                    return response.data;
+
+                } catch (error) {
+                    console.log('Request Error:', error);
+                }
+            }else {
+                this.setState({ errorCreateNewProduct: true });
+            }
         }
 
         return (
@@ -65,7 +66,7 @@ export default class NewProduct extends React.Component {
                                 height: 145
                             }}
                             source={Product}
-                       />
+                        />
                     </View>
                     <View style={styles.container}>
                         <Text style={styles.text}>Nome do Produto</Text>
@@ -111,6 +112,19 @@ export default class NewProduct extends React.Component {
                             style={styles.input}
                             onChangeText={(text) => { this.setState({ rentPrice: text }) }}
                             value={this.state.rentPrice} />
+                        {this.state.errorCreateNewProduct == true
+                            ?
+                            <View style={styles.contentAlert}>
+                                <MaterialCommunityIcons
+                                    name="alert-circle"
+                                    size={24}
+                                    color="red"
+                                />
+                                <Text style={styles.warningAlert}>Há campos obrigatórios que estão vazios.</Text>
+                            </View>
+                            :
+                            <View></View>
+                        }
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -160,7 +174,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+    warningAlert: {
+        paddingLeft: 10,
+        color: "red",
+        fontSize: 12
+    },
     checkbox: {
         alignSelf: "center",
-	},
+    },
 });
