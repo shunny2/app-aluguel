@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpacity, ScrollView, Platform, Image} from 'react-native';
-// import Product from '../../assets/baixados.jpg';
+import Product from '../../assets/product.jpg';
 import { CheckBox } from 'react-native-elements'
 
 export default class NewProduct extends React.Component {
@@ -34,6 +34,7 @@ export default class NewProduct extends React.Component {
                                 width: 145,
                                 height: 145
                             }}
+                            source={Product}
                        />
                     </View>
                     <View style={styles.container}>
