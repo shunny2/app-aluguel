@@ -3,12 +3,20 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, ScrollView, Pl
 import Product from '../../assets/product.jpg';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { CheckBox } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { AuthContext } from '../providers/auth';
+
+import api from '../services/api';
 
 export default class NewProduct extends React.Component {
+
+    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
         this.state = {
+            user_id: "",
             productName: "",
             size: "",
             description: "",
@@ -21,12 +29,19 @@ export default class NewProduct extends React.Component {
         };
     }
 
+    componentDidMount() {
+        const { user } = this.context;
+        this.setState({ user_id: user.user_id });
+    }
+
     render() {
 
         const CreateNewProduct = async () => {
+
             if (this.state.productName != '' && this.state.size != '' && this.description != '' && this.quantity != '' && this.category != '' && this.price != '') {
                 try {
                     const response = await api.post('/produtos/create', {
+                        usuario_id: this.state.user_id,
                         nome: this.state.productName,
                         preco: this.state.price,
                         estoque: this.state.quantity,
@@ -39,7 +54,7 @@ export default class NewProduct extends React.Component {
 
                     //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
 
-                    this.props.navigation.pop();
+                    this.props.navigation.push('DrawerScreens', { screen: 'Home' });
 
                     console.log(response.data);
 
@@ -48,7 +63,7 @@ export default class NewProduct extends React.Component {
                 } catch (error) {
                     console.log('Request Error:', error);
                 }
-            }else {
+            } else {
                 this.setState({ errorCreateNewProduct: true });
             }
         }
@@ -125,6 +140,11 @@ export default class NewProduct extends React.Component {
                             :
                             <View></View>
                         }
+                        <TouchableOpacity
+                            style={styles.btnSubmit}
+                            onPress={CreateNewProduct}>
+                            <Text style={styles.submitTxt}>Salvar</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -167,6 +187,20 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'Roboto',
         padding: 3,
+    },
+    btnSubmit: {
+        backgroundColor: '#FFF',
+        width: 170,
+        height: 72,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        marginTop: 5
+    },
+    submitTxt: {
+        color: '#000',
+        fontSize: 24,
+        fontFamily: 'Roboto'
     },
     contentAlert: {
         marginTop: 20,
