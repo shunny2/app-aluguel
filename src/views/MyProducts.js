@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
-
 const MyProducts = (props) => {
     return (
         <View style={styles.background}>

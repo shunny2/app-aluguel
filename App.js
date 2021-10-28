@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,11 +15,14 @@ import Logout from './src/views/Logout';
 import NewAddress from './src/views/NewAddress';
 import MyProducts from './src/views/MyProducts';
 import NewProduct from './src/views/NewProduct';
+import ProductSeller from './src/views/ProductSeller';
+
+import { AuthProvider } from './src/providers/auth';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator();
 
-function DrawerScreens({ navigation }) {
+function DrawerScreens({navigation, routes}) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -82,7 +85,7 @@ function DrawerScreens({ navigation }) {
           headerTitle: '',
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => { }}>
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                   <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Salvar</Text>
                 </View>
@@ -106,6 +109,22 @@ function DrawerScreens({ navigation }) {
         }}
       />
       <Drawer.Screen
+        name="ProductSeller"
+        component={ProductSeller}
+        options={{
+          headerTitle: '',
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => { }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Editar</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Drawer.Screen
         name="Logout"
         component={Logout}
         options={{
@@ -125,6 +144,7 @@ function DrawerScreens({ navigation }) {
 
 export default function App() {
   return (
+    <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Login"
@@ -165,6 +185,7 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
   )
 }
 
