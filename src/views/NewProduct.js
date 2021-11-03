@@ -67,7 +67,7 @@ export default class NewProduct extends React.Component {
                 this.setState({ errorCreateNewProduct: true });
             }
         }
-
+        
         return (
             <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -150,6 +150,11 @@ export default class NewProduct extends React.Component {
             </KeyboardAvoidingView>
         )
     }
+}
+
+export async function CreateNewProduct() {
+
+    console.log("chamando function...");
 }
 
 const styles = StyleSheet.create({

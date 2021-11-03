@@ -3,13 +3,19 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, Text, TouchableOpaci
 import ProfileIcon from '../../assets/profileIcon.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { AuthContext } from '../providers/auth';
+
+import api from '../services/api';
 import firebase from '../services/firebase';
 
 export default class Profile extends React.Component {
 
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
+      user_id: "",
       name: "",
       email: "",
       password: "",
@@ -19,10 +25,43 @@ export default class Profile extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { user } = this.context;
+    this.setState({ user_id: user.user_id });
+  }
+
   render() {
-    
+
     const GoToAddress = () => {
       this.props.navigation.navigate('Address');
+    }
+
+    const UpdateProfile = async () => {
+
+      if (this.state.user_id != '') {
+        try {
+          const response = await api.put(`/usuarios/${this.state.user_id}`, {
+            nome: this.state.name,
+            email: this.state.email,
+            cpf_cnpj: this.state.cpf,
+            telefone: this.state.phone,
+            senha: this.state.password
+          });
+
+          //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
+          this.props.navigation.push('DrawerScreens', { screen: 'Home' });
+
+          console.log(response.data);
+
+          return response.data;
+
+        } catch (error) {
+          console.log('Request Error:', error);
+        }
+      } else {
+        this.setState({ errorUpdateProduct: true });
+      }
     }
 
     return (
@@ -101,6 +140,11 @@ export default class Profile extends React.Component {
       </KeyboardAvoidingView>
     )
   }
+}
+
+export async function UpdateProfile() {
+
+  console.log("chamando function...");
 }
 
 const styles = StyleSheet.create({

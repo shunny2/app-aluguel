@@ -1,77 +1,120 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, TextInput } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const NewAddress = (props) => {
 
-    const [rua, setRua] = useState('');
-    const [numero, setNumero] = useState('');
-    const [bairro, setBairro] = useState('');
-    const [cidade, setCidade] = useState('');
-    const [estado, setEstado] = useState('');
-    const [CEP, setCEP] = useState('');
-    const [complemento, setComplemento] = useState('');
+    const [street, setStreet] = useState('');
+    const [number, setNumber] = useState('');
+    const [district, setDistrict] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [complement, setComplement] = useState('');
+    const [errorCreateNewProduct, setErrorCreateNewProduct] = useState(false);
+
+    const createNewAddress = async () => {
+
+        if (street != '' && district != '' && zipCode != '' && city != '' && state != '') {
+            try {
+                const response = await api.post('/enderecos/create', {
+                    rua: street,
+                    bairro: district,
+                    cep: zipCode,
+                    cidade: city,
+                    estado: state
+                });
+
+                //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
+                this.props.navigation.push('DrawerScreens', { screen: 'Address' });
+
+                console.log(response.data);
+
+                return response.data;
+
+            } catch (error) {
+                console.log('Request Error:', error);
+            }
+        } else {
+            setErrorCreateNewProduct(true);
+        }
+    }
 
     return (
         <ScrollView>
-        <View style={styles.background}>
-            <Text style={styles.titleTxt}>Novo Endereço</Text>
-            <View>
-                <Text style={styles.text}>Rua</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setRua(text)}
-                    value={rua} />
-                <Text style={styles.text}>Número</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setNumero(text)}
-                    value={numero} />
-                <Text style={styles.text}>Bairro</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setBairro(text)}
-                    value={bairro} />
-                <Text style={styles.text}>Cidade</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setCidade(text)}
-                    value={cidade} />
-                <Text style={styles.text}>Estado</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setEstado(text)}
-                    value={estado} />
-                <Text style={styles.text}>CEP</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setCEP(text)}
-                    value={CEP} />
-                <Text style={styles.text}>Complemento</Text>
-                <TextInput
-                    style={styles.input}
-                    type="text"
-                    autoCorrect={false}
-                    onChangeText={(text) => setComplemento(text)}
-                    value={complemento} />
+            <View style={styles.background}>
+                <Text style={styles.titleTxt}>Novo Endereço</Text>
+                <View>
+                    <Text style={styles.text}>Rua</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setStreet(text)}
+                        value={street} />
+                    <Text style={styles.text}>Número</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setNumber(text)}
+                        value={number} />
+                    <Text style={styles.text}>Bairro</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setDistrict(text)}
+                        value={district} />
+                    <Text style={styles.text}>Cidade</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setCity(text)}
+                        value={city} />
+                    <Text style={styles.text}>Estado</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setState(text)}
+                        value={state} />
+                    <Text style={styles.text}>CEP</Text>
+                    <TextInput
+                        style={styles.input}
+                        keyboardType="numeric"
+                        autoCorrect={false}
+                        onChangeText={(text) => setZipCode(text)}
+                        value={zipCode} />
+                    <Text style={styles.text}>Complemento</Text>
+                    <TextInput
+                        style={styles.input}
+                        type="text"
+                        autoCorrect={false}
+                        onChangeText={(text) => setComplement(text)}
+                        value={complement} />
+                </View>
+                {errorCreateNewProduct == true
+                    ?
+                    <View style={styles.contentAlert}>
+                        <MaterialCommunityIcons
+                            name="alert-circle"
+                            size={24}
+                            color="red"
+                        />
+                        <Text style={styles.warningAlert}>Há campos obrigatórios que estão vazios.</Text>
+                    </View>
+                    :
+                    <View></View>
+                }
+                <TouchableOpacity style={styles.btnAddress}
+                    onPress={createNewAddress}>
+                    <Text style={styles.addressTxt}>Cadastrar</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.btnAddress}
-            onPress={() => props.navigation.navigate('Address')}>
-                <Text style={styles.addressTxt}>Cadastrar</Text>
-            </TouchableOpacity>
-        </View>
         </ScrollView>
     );
 }
@@ -94,7 +137,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 24,
         fontFamily: 'Roboto',
-        backgroundColor:'#FFF',
+        backgroundColor: '#FFF',
         textAlign: "left",
         margin: 15
     },
@@ -126,5 +169,15 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 5
     },
-
+    contentAlert: {
+        marginTop: 20,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    warningAlert: {
+        paddingLeft: 10,
+        color: "red",
+        fontSize: 12
+    },
 });

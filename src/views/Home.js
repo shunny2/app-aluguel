@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image } from 'react-native';
+
+import Product from '../../assets/product.jpg';
 
 import api from '../services/api';
 
-class Home extends React.Component {
+export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      products:[],
+      products: [],
       loading: false,
       error: false
     }
@@ -19,8 +21,8 @@ class Home extends React.Component {
     api.get('/produtos').then(response => {
       const results = response.data;
       this.setState({
-        products:results,
-        loading:false,
+        products: results,
+        loading: false,
       });
       console.log(results);
     }).catch(error => {
@@ -34,33 +36,31 @@ class Home extends React.Component {
       <View style={styles.background}>
         {
           this.state.loading
-          ? <ActivityIndicator size="large" color="#0000ff"/>
-          : this.state.error
-            ? <Text style={styles.error}>Ops... Algo deu errado :(</Text>
-            : <FlatList
-              showsVerticalScrollIndicator={false}
-              style={styles.container}
-              data={this.state.products}
-              renderItem={({ item }) => (
-                <View style={styles.container}>
-                  <Text style={styles.title}>Identificador: {item.id}</Text>
-                  <Text style={styles.title}>Nome: {item.nome}</Text>
-                  <Text style={styles.title}>Preço: {item.preco}</Text>
-                  <Text style={styles.title}>Categoria: {item.categoria}</Text>
-                  <Text style={styles.title}>Descrição: {item.descricao}</Text>
-                  <Text style={styles.title}>Medida: {item.medida}</Text>
-                  <Text style={styles.title}>Estoque: {item.estoque}</Text>
-                </View>
-              )}
-              keyExtractor = { item => item.nome }
-            />
+            ? <ActivityIndicator size="large" color="#0000ff" />
+            : this.state.error
+              ? <Text style={styles.error}>Ops... Algo deu errado :(</Text>
+              : <FlatList
+                showsVerticalScrollIndicator={false}
+                style={styles.container}
+                data={this.state.products}
+                renderItem={({ item }) => (
+                  <View style={styles.containerProduct}>
+                    <Image
+                      style={styles.image}
+                      source={Product} 
+                    />
+                    <Text style={styles.title}>Nome: {item.nome}</Text>
+                    <Text style={styles.title}>Preço: {item.preco}</Text>
+                    <Text style={styles.title}>Descrição: {item.descricao}</Text>
+                  </View>
+                )}
+                keyExtractor={item => item.nome}
+              />
         }
       </View>
     );
   }
 }
-
-export default Home;
 
 const styles = StyleSheet.create({
   background: {
@@ -71,19 +71,30 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    margin: 15
+    margin: 15,
+  },
+  containerProduct: {
+    flex: 1,
+    margin: 15,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   containerView: {
     marginBottom: 20
   },
   title: {
     fontSize: 18,
-    alignSelf: "center",
+    alignSelf: 'center',
     margin: 2
   },
-  error:{
-    color:'red',
-    fontSize:16,
-    alignSelf:'center'
+  image: {
+    width: 145,
+    height: 145,
+    alignSelf: 'center'
+  },
+  error: {
+    color: 'red',
+    fontSize: 16,
+    alignSelf: 'center'
   }
 });

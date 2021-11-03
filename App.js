@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItem, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Login from './src/views/Login';
@@ -19,13 +19,31 @@ import ProductSeller from './src/views/ProductSeller';
 
 import { AuthProvider } from './src/providers/auth';
 
+import { CreateNewProduct } from './src/views/NewProduct';
+import { UpdateProfile } from './src/views/Profile';
+
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator();
 
-function DrawerScreens({navigation, routes}) {
+const CustomDrawerContent = (props) => {
+  const { state, ...rest } = props;
+  const newState = { ...state };
+  newState.routes = newState.routes.filter(
+    (item) => item.name !== 'Address' && item.name !== 'NewAddress' && item.name !== 'NewProduct' && item.name !== 'ProductSeller'
+  );
+
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList state={newState} {...rest} />
+    </DrawerContentScrollView>
+  );
+};
+
+function DrawerScreens({ navigation }) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
+      // drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={screenOptions}>
       <Drawer.Screen
         name="Home"
@@ -55,39 +73,9 @@ function DrawerScreens({navigation, routes}) {
           ),
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={() => { navigation.navigate('Home'); }}>
+              <TouchableOpacity onPress={() => UpdateProfile()}>
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
                   <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Editar</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          },
-        }}
-      />
-      <Drawer.Screen
-        name="Address"
-        component={Address}
-        options={{
-          headerTitle: ''
-        }}
-      />
-      <Drawer.Screen
-        name="NewAddress"
-        component={NewAddress}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Drawer.Screen
-        name="NewProduct"
-        component={NewProduct}
-        options={{
-          headerTitle: '',
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={() => { }}>
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Salvar</Text>
                 </View>
               </TouchableOpacity>
             );
@@ -109,22 +97,6 @@ function DrawerScreens({navigation, routes}) {
         }}
       />
       <Drawer.Screen
-        name="ProductSeller"
-        component={ProductSeller}
-        options={{
-          headerTitle: '',
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={() => { }}>
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Editar</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          },
-        }}
-      />
-      <Drawer.Screen
         name="Logout"
         component={Logout}
         options={{
@@ -138,6 +110,56 @@ function DrawerScreens({navigation, routes}) {
           )
         }}
       />
+      <Drawer.Screen
+        name="NewProduct"
+        component={NewProduct}
+        options={{
+          headerTitle: '',
+          drawerLabel: () => null,
+          headerRight: (props) => {
+            return (
+              <TouchableOpacity onPress={() => CreateNewProduct()}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Salvar</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="ProductSeller"
+        component={ProductSeller}
+        options={{
+          headerTitle: '',
+          drawerLabel: () => null,
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => { }}>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text style={{ fontSize: 24, fontFamily: 'Roboto', padding: 10 }}>Editar</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="Address"
+        component={Address}
+        options={{
+          headerTitle: '',
+          drawerLabel: () => null
+        }}
+      />
+      <Drawer.Screen
+        name="NewAddress"
+        component={NewAddress}
+        options={{
+          headerTitle: '',
+          drawerLabel: () => null
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -145,46 +167,46 @@ function DrawerScreens({navigation, routes}) {
 export default function App() {
   return (
     <AuthProvider>
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={screenOptions}>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={() => {
-            return {
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={screenOptions}>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={() => {
+              return {
+                headerShown: false,
+                title: 'Login'
+              }
+            }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
+            options={{
               headerShown: false,
-              title: 'Login'
-            }
-          }}
-        />
-        <Stack.Screen
-          name="ForgotPassword"
-          component={ForgotPassword}
-          options={{
-            headerShown: false,
-            title: 'Esqueci a senha'
-          }}
-        />
-        <Stack.Screen
-          name="UserForm"
-          component={UserForm}
-          options={{
-            headerShown: false,
-            title: 'Formulário de Usuários'
-          }}
-        />
-        <Stack.Screen
-          name="DrawerScreens"
-          component={DrawerScreens}
-          options={{
-            headerShown: false,
-            title: 'Menu Lateral'
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+              title: 'Esqueci a senha'
+            }}
+          />
+          <Stack.Screen
+            name="UserForm"
+            component={UserForm}
+            options={{
+              headerShown: false,
+              title: 'Formulário de Usuários'
+            }}
+          />
+          <Stack.Screen
+            name="DrawerScreens"
+            component={DrawerScreens}
+            options={{
+              headerShown: false,
+              title: 'Menu Lateral'
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </AuthProvider>
   )
 }
