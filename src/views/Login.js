@@ -3,11 +3,16 @@ import { StyleSheet, View, KeyboardAvoidingView, TextInput, TouchableOpacity, Te
 import Logo from '../../assets/logo.png';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import { AuthContext } from '../providers/auth';
+
 import api from '../services/api';
 
 const Login = (props) => {
 
     const [logo] = useState(new Animated.ValueXY({ x: 210, y: 210 }));
+
+    const { user, setUser } = React.useContext(AuthContext);
+    let users = [];
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -56,12 +61,23 @@ const Login = (props) => {
             try {
                 const response = await api.post('/usuarios/authenticate', {
                     email: email,
-                    senha: password,
+                    senha: password
                 });
 
                 //await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+                
+                users = response.data;
 
-                console.log(response.data);
+                // setUser({user_id: users.usuario.id});
+                // setUser({name: users.usuario.nome});
+                // setUser({email: users.usuario.email});
+                user.user_id = users.usuario.id;
+                user.name = users.usuario.nome;
+                user.email = users.usuario.email;
+
+                console.log(user);
+
+                // props.navigation.navigate('DrawerScreens', { screen: 'Home', params: { user: user } }); 
                 props.navigation.navigate('DrawerScreens', { screen: 'Home' });
 
                 return response.data;
